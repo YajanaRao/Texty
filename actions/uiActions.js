@@ -10,7 +10,8 @@ let readFileContentOnClick = function(dir, el){
     })
 }
 
-const handleNewFile = function(form, dir, content){ 
+const handleNewFile = function(form, dir, content){
+    console.log("Creating new file");
     let fileName =form.target[0].value
     form.target.classList.remove('show')
     let elChild = document.createElement('li')
@@ -20,13 +21,13 @@ const handleNewFile = function(form, dir, content){
     form.target.parentNode.insertBefore(elChild,form.target.nextSibling);
     document.getElementById('content').innerHTML = content;
 }
-const readTitles = function(dataURL){ 
+const readTitles = function(dataURL){
     let titles = []
     fs.readdirSync(dataURL).forEach((file, i) => {
         if(file.split('.md').length==2){
             titles.push({
-                title: `${file.split('.md')[0]}`, 
-                dir: `${dataURL}/${file}` 
+                title: `${file.split('.md')[0]}`,
+                dir: `${dataURL}/${file}`
             })
         }
     })
@@ -37,8 +38,3 @@ module.exports = {
     readTitles,
     handleNewFile
 };
-
-
-
-
-

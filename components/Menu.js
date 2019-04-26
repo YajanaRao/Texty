@@ -4,7 +4,7 @@ const { NEW_DOCUMENT_NEEDED, SAVE_NEEDED, SAVED, PREFERENCE_SAVE_DATA_NEEDED,PRE
 const fs = require('fs')
 let contentToSave = ''
 ipcMain.on(SAVE_NEEDED, (event, content) => {
-    contentToSave = content 
+    contentToSave = content
 })
 let inputs;
 ipcMain.on(PREFERENCE_SAVE_DATA_NEEDED, (event, preferences) => {
@@ -14,43 +14,7 @@ ipcMain.on(PREFERENCE_SAVE_DATA_NEEDED, (event, preferences) => {
 module.exports = function(window){
     return Menu.buildFromTemplate([
         {
-            label: app.getName(),
-            submenu: [
-                {
-                    label: 'Preferences',
-                    accelerator: 'cmd+,', // shortcut
-                    click: _ => {
-                        const htmlPath = path.join('file://', __dirname, '../static/preferences.html')
-                        let prefWindow = new BrowserWindow({ y: 200, x:200, width: 500, height: 300, resizable: false })
-                        prefWindow.loadURL(htmlPath)
-                        prefWindow.show()
-                       //let devtools = new BrowserWindow()
-   // prefWindow.webContents.setDevToolsWebContents(devtools.webContents)
-    //prefWindow.webContents.openDevTools({mode: 'detach'})
-                        prefWindow.on('close', function () {
-                            prefWindow = null 
-                            userDataPath = app.getPath('userData');
-                            filePath = path.join(userDataPath, 'preferences.json')
-                            inputs && fs.writeFileSync(filePath, JSON.stringify(inputs));
-                            window.webContents.send(PREFERENCE_SAVED, inputs); 
-                       })
-                        
-                    },
-                },
-            ]
-        },
-        {
-            label: 'Edit',
-            submenu: [
-                {label: 'Undo', role: 'undo'  },
-                {label: 'Redo', role: 'redo'  },
-                {label: 'Cut', role: 'cut'  },
-                {label: 'Copy', role: 'copy'  },
-                {label: 'Paste', role:'paste'  },
-            ]
-        },
-        {
-            label: 'Custom Menu', 
+            label: 'File',
             submenu: [
                 {
                     label: 'New',
@@ -73,7 +37,42 @@ module.exports = function(window){
                     accelerator: 'cmd+S'
                 }
             ]
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                {label: 'Undo', role: 'undo'  },
+                {label: 'Redo', role: 'redo'  },
+                {label: 'Cut', role: 'cut'  },
+                {label: 'Copy', role: 'copy'  },
+                {label: 'Paste', role:'paste'  },
+            ]
+        },
+        {
+            label: app.getName(),
+            submenu: [
+                {
+                    label: 'Preferences',
+                    accelerator: 'cmd+,', // shortcut
+                    click: _ => {
+                        const htmlPath = path.join('file://', __dirname, '../static/preferences.html')
+                        let prefWindow = new BrowserWindow({ y: 200, x:200, width: 500, height: 300, resizable: false })
+                        prefWindow.loadURL(htmlPath)
+                        prefWindow.show()
+                       //let devtools = new BrowserWindow()
+   // prefWindow.webContents.setDevToolsWebContents(devtools.webContents)
+    //prefWindow.webContents.openDevTools({mode: 'detach'})
+                        prefWindow.on('close', function () {
+                            prefWindow = null
+                            userDataPath = app.getPath('userData');
+                            filePath = path.join(userDataPath, 'preferences.json')
+                            inputs && fs.writeFileSync(filePath, JSON.stringify(inputs));
+                            window.webContents.send(PREFERENCE_SAVED, inputs);
+                       })
+
+                    },
+                },
+            ]
         }
-        
-    ])    
+    ])
 }
